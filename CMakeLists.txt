@@ -15,6 +15,9 @@ include_directories(/usr/local/include)
 link_directories(/usr/local/lib)
 include_directories(src/Eigen-3.3)
 
+include_directories(/home/m/Downloads/Ipopt-3.12.7/include)
+link_directories(/home/m/Downloads/Ipopt-3.12.7/lib)
+
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
 include_directories(/usr/local/opt/openssl/include)

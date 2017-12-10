@@ -3,6 +3,44 @@ Self-Driving Car Engineer Nanodegree Program
 
 ---
 
+# My Results
+my results is in this [video](demo_videos/mpc_demo.mp4)
+---
+# Hints!
+### if you want to use my project, please comment line18 and line 19 in [CMakeLists.txt](CMakeLists.txt). Because I install the Ipopt in the Downloads rather than /usr/local/include
+
+# Implementation
+## The Model
+The model equations are as follow:
+```
+x[t] = x[t-1] + v[t-1] * cos(psi[t-1]) * dt
+y[t] = y[t-1] + v[t-1] * sin(psi[t-1]) * dt
+psi[t] = psi[t-1] + v[t-1] / Lf * delta[t-1] * dt
+v[t] = v[t-1] + a[t-1] * dt
+cte[t] = f(x[t-1]) - y[t-1] + v[t-1] * sin(epsi[t-1]) * dt
+epsi[t] = psi[t] - psides[t-1] + v[t-1] * delta[t-1] / Lf * dt
+
+```
+where
+```
+x, y : Car's position.
+psi : Car's orientation.
+v : Car's velocity.
+cte : Cross-track error.
+epsi : Orientation error.
+delta : steering angle
+a: acceleration
+```
+## Timestep Length and Elapsed Duration (N & dt)
+The number of points(N) and the time interval(dt) define the prediction horizon. I have tried many different combinations. I found that too many points make the controller run slower. I fix the N*dt to 1s, and I tried dt from 0.05 to 0.2s and N 5 to 20. Finally the values for dt and N are 0.1s and 10.
+
+## Polynomial Fitting and MPC Preprocessing
+The waypoints are preprocessed by transforming them to the vehicle's coordinate. it is easy to fit a polynomial to the waypoints because the vehicle's x and y coordinates are now at the origin (0, 0) and the orientation angle is also zero. After we get the 3 order polynomial coefficients, we can use it to calculate the ++cte++ and ++epsi++.
+
+## Model Predictive Control with Latency
+Since we knew the car's model, which means the dt is 0.1s, we can use the model equations to calculate the delay state. and then we use the delay state as the initial state. The implementation can be found at src/main.cpp from line 136 to line 145.
+
+
 ## Dependencies
 
 * cmake >= 3.5
